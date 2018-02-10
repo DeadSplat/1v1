@@ -29,7 +29,7 @@ MonoBehaviour:
     m_Settings:
       excludeSkybox: 1
   antialiasing:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
       method: 1
       fxaaSettings:
@@ -38,7 +38,7 @@ MonoBehaviour:
         jitterSpread: 0.75
         sharpen: 0.3
         stationaryBlending: 0.95
-        motionBlending: 0.85
+        motionBlending: 0
   ambientOcclusion:
     m_Enabled: 0
     m_Settings:
@@ -50,36 +50,36 @@ MonoBehaviour:
       ambientOnly: 0
       highPrecision: 0
   screenSpaceReflection:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       reflection:
         blendType: 0
-        reflectionQuality: 2
-        maxDistance: 100
-        iterationCount: 256
-        stepSize: 3
-        widthModifier: 0.5
+        reflectionQuality: 0
+        maxDistance: 131
+        iterationCount: 553
+        stepSize: 10
+        widthModifier: 1.92
         reflectionBlur: 1
         reflectBackfaces: 0
       intensity:
-        reflectionMultiplier: 1
+        reflectionMultiplier: 0.92
         fadeDistance: 100
         fresnelFade: 1
         fresnelFadePower: 1
       screenEdgeMask:
-        intensity: 0.03
+        intensity: 0.096
   depthOfField:
     m_Enabled: 0
     m_Settings:
-      focusDistance: 7.66
-      aperture: 0.9
-      focalLength: 37
+      focusDistance: 48.95
+      aperture: 32
+      focalLength: 300
       useCameraFov: 0
-      kernelSize: 3
+      kernelSize: 2
   motionBlur:
-    m_Enabled: 1
+    m_Enabled: 0
     m_Settings:
-      shutterAngle: 360
+      shutterAngle: 58
       sampleCount: 32
       frameBlending: 0.011
   eyeAdaptation:
@@ -305,7 +305,7 @@ MonoBehaviour:
       opacity: 1
       rounded: 0
   dithering:
-    m_Enabled: 0
+    m_Enabled: 1
   monitors:
     currentMonitorID: 0
     refreshOnPlay: 0

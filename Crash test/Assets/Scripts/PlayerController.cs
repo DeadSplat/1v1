@@ -8,14 +8,25 @@ public class PlayerController : MonoBehaviour
 {
 	public GameObject bullet;
 	public Transform BulletSpawn;
+	public Transform BulletSpawnScoped;
 	public float FireRate = 0.1f;
 	private float nextFire;
 
 	public ParticleSystem MuzzleFlash;
+	public Animator GunAnim;
+	public Animator CameraRecoilAnim;
+
+	public aimDownScope aimScript;
+
+	public Transform CamPos;
+	public float NormalHeight = 0.6f;
+	public float CrouchHeight = 0.2f;
+	public float CrouchSmoothingTime = 1;
+	public float BulletInaccuracyFactor = 1;
 
 	void Update ()
 	{
-		if (Input.GetMouseButton (0) && Time.time > nextFire) 
+		if (Input.GetMouseButton (0) && Time.time >= nextFire) 
 		{
 			Shoot ();
 			nextFire = Time.time + FireRate;
@@ -25,11 +36,46 @@ public class PlayerController : MonoBehaviour
 		{
 			Application.Quit ();
 		}
+
+		if (Input.GetKey (KeyCode.LeftControl) == true) 
+		{
+			CamPos.localPosition = new Vector3 (
+				0, 
+				Mathf.Lerp (CamPos.localPosition.y, CrouchHeight, CrouchSmoothingTime * Time.deltaTime), 
+				0
+			);
+		}
+
+		if (Input.GetKey (KeyCode.LeftControl) == false) 
+		{
+			CamPos.localPosition = new Vector3 (
+				0, 
+				Mathf.Lerp (CamPos.localPosition.y, NormalHeight, CrouchSmoothingTime * Time.deltaTime), 
+				0
+			);
+		}
+
 	}
 
 	void Shoot ()
 	{
-		Instantiate (bullet, BulletSpawn.position, BulletSpawn.rotation);
+		aimScript.anim.enabled = true;
 		MuzzleFlash.Play ();
+
+		if (aimScript.IsHipfire == true)
+		{
+			Quaternion BulletSpawnInaccuracy = BulletSpawn.rotation * Quaternion.Euler(Random.insideUnitSphere * BulletInaccuracyFactor);
+			Instantiate (bullet, BulletSpawn.position, BulletSpawnInaccuracy);
+			GunAnim.Play ("Recoil");
+		}
+
+		if (aimScript.IsHipfire == false) 
+		{
+			Instantiate (bullet, BulletSpawnScoped.position, BulletSpawnScoped.rotation);
+			CameraRecoilAnim.Play ("CamRecoil");
+
+
+			aimScript.ScopeOverlayAnim.Play ("ScopeOverlayShoot");
+		}
 	}
 }
