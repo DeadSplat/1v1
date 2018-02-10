@@ -1,0 +1,7 @@
+
+*.csproj
+
+Library/
+Crash test/UnityPackageManager/manifest.json
+Crash test/Crash test.userprefs
+Crash test/Crash test.sln
