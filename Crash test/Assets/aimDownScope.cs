@@ -6,6 +6,8 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class aimDownScope : MonoBehaviour 
 {
 	public RigidbodyFirstPersonController rbfpsController;
+	public PlayerController playerControllerScript;
+
 	[Header ("Camera settings")]
 	public Camera cam;
 	public Vector2 FieldOfViewRange = new Vector2 (60, 30);
@@ -15,7 +17,10 @@ public class aimDownScope : MonoBehaviour
 	public Vector3 hipfire;
 
 	public Animator anim;
+
 	public Animator ScopeOverlayAnim;
+	public GameObject scopeOverlay;
+	public float ScopeDelay = 1;
 
 	public float TargetFieldOfView;
 	public Vector2 FieldOfViewLimit = new Vector2 (10, 30);
@@ -36,12 +41,14 @@ public class aimDownScope : MonoBehaviour
 
 	public float NormalRunMultiplier = 1.8f;
 
-	public GameObject scopeOverlay;
-
-	public float ScopeDelay = 1;
-
+	[Header ("Hold Breath")]
 	public float HoldBreathTimeDuration;
 	public float HoldBreathTimeRemaining;
+
+	[Header ("Reticule")]
+	public RectTransform Reticule;
+	public Vector3 ReticuleTargetScale = Vector3.one;
+	public float ReticuleSizeSmoothing = 10;
 
 	void Start ()
 	{
@@ -72,22 +79,25 @@ public class aimDownScope : MonoBehaviour
 				{
 					Invoke ("ScopeIn", ScopeDelay);
 					TargetFieldOfView = 30;
+					ReticuleTargetScale = Vector3.zero;
 				}
 			}
 
 			if (Input.GetMouseButton (1)) 
 			{
-				if (CanScope == true) 
-				{
-					if (IsInvoking ("ScopeIn") == false)
-					{
-						Invoke ("ScopeIn", ScopeDelay);
-						IsHipfire = false;
-					}
-				}
+				
 
 				if (Input.GetKey (KeyCode.LeftShift) == false) 
 				{
+					if (CanScope == true) 
+					{
+						if (IsInvoking ("ScopeIn") == false)
+						{
+							Invoke ("ScopeIn", ScopeDelay);
+							IsHipfire = false;
+						}
+					}
+
 					if (HoldBreathTimeRemaining < HoldBreathTimeDuration)
 					{
 						HoldBreathTimeRemaining += Time.deltaTime;
@@ -107,16 +117,28 @@ public class aimDownScope : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.LeftShift)) 
 		{
 			CanScope = false;
+			anim.SetBool ("IsSprinting", true);
+			playerControllerScript.CameraRecoilAnim.SetBool ("IsHipfire", false);
 			//ForceHipFireMode ();
 		}
 
 		if (Input.GetKey (KeyCode.LeftShift))
 		{
 			//CanScope = false;
+			//anim.SetBool ("IsSprinting", true);
+			//IsHipfire = true;
+			//ReticuleTargetScale = new Vector3 (3.5f, 3.5f, 1);
 
 			if (Input.GetMouseButton (1)) 
 			{
-				CanScope = true;
+				//ScopeOut ();
+
+				/*if (IsHipfire == false)
+				{
+					CanScope = false;
+					anim.SetBool ("IsSprinting", true);
+				}*/
+			
 				//ForceHipFireMode ();
 			}
 				
@@ -124,6 +146,7 @@ public class aimDownScope : MonoBehaviour
 			{
 				ScopeOverlayAnim.SetBool ("HoldBreath", true);
 				HoldBreathTimeRemaining -= Time.deltaTime;
+				playerControllerScript.CameraRecoilAnim.SetBool ("IsHipfire", true);
 			}
 
 			if (HoldBreathTimeRemaining < 0) 
@@ -139,10 +162,18 @@ public class aimDownScope : MonoBehaviour
 		{
 			CanScope = true;
 			ScopeOverlayAnim.SetBool ("HoldBreath", false);
+			anim.SetBool ("IsSprinting", false);
+			ReticuleTargetScale = new Vector3 (1f, 1f, 1);
 
 		}
 		CheckAimDownSights ();
+		UpdateReticuleSize ();
 
+	}
+
+	void UpdateReticuleSize ()
+	{
+		Reticule.localScale = Vector3.Lerp (Reticule.localScale, ReticuleTargetScale, ReticuleSizeSmoothing * Time.deltaTime);
 	}
 
 	void CheckAimDownSights ()
@@ -198,9 +229,17 @@ public class aimDownScope : MonoBehaviour
 	}
 
 	void ScopeIn ()
-	{
+	{			
+		playerControllerScript.CameraRecoilAnim.SetBool ("IsHipfire",  false);
+
 		scopeOverlay.SetActive (true);
 		Gun.enabled = false;
+		ReticuleTargetScale = Vector3.zero;
+
+		//if (playerControllerScript.CameraRecoilAnim.GetCurrentAnimatorStateInfo (0).IsName ("CamScopeIdle") == false) 
+		//{
+		//	playerControllerScript.CameraRecoilAnim.Play ("CamScopeIdle");
+		//}
 		//cam.fieldOfView = 30;
 		//TargetFieldOfView = 30;
 	}
@@ -212,12 +251,15 @@ public class aimDownScope : MonoBehaviour
 
 	void ScopeOut ()
 	{
+		playerControllerScript.CameraRecoilAnim.SetBool ("IsHipfire", true);
 		CancelInvoke ("ScopeIn");
 		anim.Play ("Idle");
 		scopeOverlay.SetActive (false);
 		Gun.enabled = true;
 		cam.fieldOfView = FieldOfViewRange.x;
+		ReticuleTargetScale = Vector3.one;
 		IsHipfire = true;
+
 	}
 
 	void ZoomIn ()

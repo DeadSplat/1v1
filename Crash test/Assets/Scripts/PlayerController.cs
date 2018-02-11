@@ -44,6 +44,16 @@ public class PlayerController : MonoBehaviour
 				Mathf.Lerp (CamPos.localPosition.y, CrouchHeight, CrouchSmoothingTime * Time.deltaTime), 
 				0
 			);
+
+			if (aimScript.IsHipfire == true)
+			{
+				aimScript.ReticuleTargetScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			}
+
+			if (aimScript.IsHipfire == false)
+			{
+				aimScript.ReticuleTargetScale = new Vector3 (0.0f, 0.0f, 0.0f);
+			}
 		}
 
 		if (Input.GetKey (KeyCode.LeftControl) == false) 
@@ -55,6 +65,11 @@ public class PlayerController : MonoBehaviour
 			);
 		}
 
+		if (Input.GetKeyUp (KeyCode.LeftControl)) 
+		{
+			aimScript.ReticuleTargetScale = new Vector3 (1f, 1f, 1f);
+		}
+
 	}
 
 	void Shoot ()
@@ -64,6 +79,7 @@ public class PlayerController : MonoBehaviour
 
 		if (aimScript.IsHipfire == true)
 		{
+			aimScript.Reticule.localScale = new Vector3 (2f, 2, 2f);
 			Quaternion BulletSpawnInaccuracy = BulletSpawn.rotation * Quaternion.Euler(Random.insideUnitSphere * BulletInaccuracyFactor);
 			Instantiate (bullet, BulletSpawn.position, BulletSpawnInaccuracy);
 			GunAnim.Play ("Recoil");
@@ -71,6 +87,7 @@ public class PlayerController : MonoBehaviour
 
 		if (aimScript.IsHipfire == false) 
 		{
+			aimScript.Reticule.localScale = new Vector3 (0f, 0, 0f);
 			Instantiate (bullet, BulletSpawnScoped.position, BulletSpawnScoped.rotation);
 			CameraRecoilAnim.Play ("CamRecoil");
 
