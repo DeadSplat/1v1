@@ -35,6 +35,6 @@ function OnGUI(){
 	//only display the bar if we are sprinting, and don't display if sprint is full
 	if(aim.sprinting || aim.sprintNum < aim.sprintDuration){
 		//display the sprint bar - change this to modify the display.
-		GUI.Box(Rect((Screen.width-baseLength)/2, yPos, tempLength, 10), "");
+		//GUI.Box(Rect((Screen.width-baseLength)/2, yPos, tempLength, 10), "");
 	}
 }
