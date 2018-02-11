@@ -596,7 +596,7 @@ function LateUpdate(){
 	} else {
 		if(GetComponent.<AudioSource>().clip == chargeLoop)
 		{
-			GetComponent.<AudioSource>().Stop();
+			//GetComponent.<AudioSource>().Stop();
 		}
 	}
 	
@@ -650,7 +650,7 @@ function Fire(){
 		if(gunTypes.spray && sprayOn){
 			if(GetComponent.<AudioSource>()){
 				if(GetComponent.<AudioSource>().clip == loopSound){
-					GetComponent.<AudioSource>().Stop();
+					//GetComponent.<AudioSource>().Stop();
 				}
 			sprayOn = false;
 			sprayScript.ToggleActive(false);
@@ -979,7 +979,7 @@ function FireSpray(){
 		GetComponent.<AudioSource>().Play();
 	}
 	if(GetComponent.<AudioSource>().clip == loopSound && GetComponent.<AudioSource>().isPlaying && AimMode.sprintingPublic){
-		GetComponent.<AudioSource>().Stop();
+		//GetComponent.<AudioSource>().Stop();
 	}else if(GetComponent.<AudioSource>() && !GetComponent.<AudioSource>().isPlaying && !AimMode.sprintingPublic){
 		GetComponent.<AudioSource>().clip = loopSound;
 		GetComponent.<AudioSource>().loop = true;
@@ -996,7 +996,7 @@ function FireSpray(){
 function ReleaseFire(key : int){
 	if(GetComponent.<AudioSource>()){
 		if(GetComponent.<AudioSource>().isPlaying && GetComponent.<AudioSource>().clip == chargeLoop){
-			GetComponent.<AudioSource>().Stop();
+			//GetComponent.<AudioSource>().Stop();
 		}
 	}
 	if(sprayOn){
@@ -1062,7 +1062,7 @@ function Reload(){
 	if(gunType == gunTypes.spray){
 		if(GetComponent.<AudioSource>()){
 			if(GetComponent.<AudioSource>().clip == loopSound && GetComponent.<AudioSource>().isPlaying){
-				GetComponent.<AudioSource>().Stop();
+				//GetComponent.<AudioSource>().Stop();
 			}
 		}
 	}
@@ -1261,7 +1261,7 @@ function SelectWeapon(){
 function DeselectWeapon(){
 	if(GetComponent.<AudioSource>()){
 		if(GetComponent.<AudioSource>().clip == loopSound && GetComponent.<AudioSource>().isPlaying){
-			GetComponent.<AudioSource>().Stop();
+			//GetComponent.<AudioSource>().Stop();
 		}
 	}
 	chargeLevel = 0;
@@ -1297,7 +1297,7 @@ function DeselectWeapon(){
 function DeselectInstant(){
 	if(GetComponent.<AudioSource>()){
 		if(GetComponent.<AudioSource>().clip == loopSound && GetComponent.<AudioSource>().isPlaying){
-			GetComponent.<AudioSource>().Stop();
+			//GetComponent.<AudioSource>().Stop();
 		}
 	}
 	chargeLevel = 0;

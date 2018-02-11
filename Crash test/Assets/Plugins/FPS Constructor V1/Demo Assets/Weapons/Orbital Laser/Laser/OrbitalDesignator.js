@@ -28,7 +28,7 @@ function Update () {
 		desigLight.enabled = false;
 	}
 	if(lockTime <= 0)
-		desigLight.transform.GetComponent.<AudioSource>().Stop();
+		//desigLight.transform.GetComponent.<AudioSource>().Stop();
 
 	if(gscript.chargeLevel <= 0){
 		lockTime = Mathf.Clamp(lockTime- Time.deltaTime, 0, lockMax);
